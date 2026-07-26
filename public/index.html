@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YW Designs — Yasiru Pabasara | Creative Prompt Engineer &amp; UI/UX Designer</title>
+<meta name="description" content="YW Designs — Crafting Ideas Into Stunning Visuals. Graphic design, branding, UI/UX and AI-powered creative solutions by Yasiru Pabasara.">
+<link rel="icon" type="image/png" href="/assets/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { bg:'#09090B', primary:'#2563EB', secondary:'#7C3AED', accent:'#06B6D4', muted:'#B8C2CC' },
+        fontFamily: { poppins:['Poppins','sans-serif'], inter:['Inter','sans-serif'], manrope:['Manrope','sans-serif'] }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root{ --grad-1: linear-gradient(135deg,#2563EB 0%,#7C3AED 55%,#06B6D4 100%); }
+  *{ scroll-behavior:smooth; }
+  html,body{ background:#09090B; color:#fff; overflow-x:hidden; }
+  body{ font-family:'Inter',sans-serif; cursor:none; }
+  @media (max-width: 768px){ body{ cursor:auto; } }
+  ::selection{ background:#7C3AED; color:#fff; }
+  ::-webkit-scrollbar{ width:8px; }
+  ::-webkit-scrollbar-track{ background:#09090B; }
+  ::-webkit-scrollbar-thumb{ background:linear-gradient(#2563EB,#7C3AED); border-radius:10px; }
+
+  #loader{ position:fixed; inset:0; z-index:9999; background:#09090B; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px; transition:opacity .8s ease, visibility .8s ease; }
+  #loader .mark{ font-family:'Poppins',sans-serif; font-weight:800; font-size:2.2rem; letter-spacing:.05em; background:var(--grad-1); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .loadbar{ width:180px; height:2px; background:rgba(255,255,255,.08); overflow:hidden; border-radius:2px; }
+  .loadbar span{ display:block; height:100%; width:0%; background:var(--grad-1); }
+
+  #cursor-dot, #cursor-ring{ position:fixed; top:0; left:0; pointer-events:none; z-index:9998; border-radius:50%; transform:translate(-50%,-50%); }
+  #cursor-dot{ width:6px; height:6px; background:#fff; }
+  #cursor-ring{ width:34px; height:34px; border:1px solid rgba(255,255,255,.5); transition:width .2s,height .2s,border-color .2s,background .2s; }
+  #cursor-ring.big{ width:64px; height:64px; background:rgba(37,99,235,.12); border-color:#2563EB; }
+  @media (max-width:768px){ #cursor-dot,#cursor-ring{ display:none; } }
+
+  .glass{ background:rgba(255,255,255,0.06); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border:1px solid rgba(255,255,255,0.10); }
+  .glass-strong{ background:rgba(255,255,255,0.09); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border:1px solid rgba(255,255,255,0.14); }
+  .grad-text{ background:var(--grad-1); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .grad-border{ position:relative; }
+  .grad-border::before{ content:''; position:absolute; inset:0; border-radius:inherit; padding:1px; background:var(--grad-1); -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; opacity:.6; pointer-events:none; }
+  .blob{ position:absolute; border-radius:50%; filter:blur(90px); opacity:.35; pointer-events:none; }
+  .btn-magnetic{ position:relative; overflow:hidden; }
+  .hover-lift{ transition:transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s ease, border-color .45s ease; }
+  .hover-lift:hover{ transform:translateY(-8px); box-shadow:0 20px 60px -20px rgba(37,99,235,.45); border-color:rgba(124,58,237,.5); }
+  .reveal{ opacity:0; transform:translateY(40px); }
+  .nav-link{ position:relative; }
+  .nav-link::after{ content:''; position:absolute; left:0; bottom:-4px; width:0%; height:1px; background:var(--grad-1); transition:width .35s ease; }
+  .nav-link:hover::after{ width:100%; }
+  .marquee-track{ display:flex; gap:1rem; width:max-content; animation:marquee 28s linear infinite; }
+  @keyframes marquee{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  .anim-gradient{ background:radial-gradient(circle at 20% 20%, rgba(37,99,235,.25), transparent 40%), radial-gradient(circle at 80% 30%, rgba(124,58,237,.25), transparent 45%), radial-gradient(circle at 50% 80%, rgba(6,182,212,.2), transparent 45%); background-size:200% 200%; animation:gradientShift 16s ease infinite; }
+  @keyframes gradientShift{ 0%{background-position:0% 0%;} 50%{background-position:100% 100%;} 100%{background-position:0% 0%;} }
+  .ripple{ position:relative; overflow:hidden; }
+  .ripple-el{ position:absolute; border-radius:50%; background:rgba(255,255,255,.35); transform:scale(0); animation:ripple .7s ease-out; pointer-events:none; }
+  @keyframes ripple{ to{ transform:scale(3.2); opacity:0; } }
+  .tilt{ transform-style:preserve-3d; transition:transform .2s ease; }
+  .portfolio-item{ break-inside:avoid; }
+  .masonry{ columns:1; column-gap:1.5rem; }
+  @media(min-width:768px){ .masonry{ columns:2; } }
+  @media(min-width:1024px){ .masonry{ columns:3; } }
+  .lightbox{ position:fixed; inset:0; z-index:200; background:rgba(4,4,6,.92); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:2rem; }
+  .lightbox.active{ display:flex; }
+  .filter-btn.active{ background:var(--grad-1); color:#fff; border-color:transparent; }
+  input:focus, textarea:focus{ outline:none; }
+  .backtotop{ opacity:0; pointer-events:none; transition:opacity .35s ease, transform .35s ease; transform:translateY(10px); }
+  .backtotop.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
+  .badge:hover{ transform:translateY(-4px) scale(1.03); }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; } }
+</style>
+</head>
+<body class="antialiased selection:bg-secondary">
+
+<div id="loader"><div class="mark">YW</div><div class="loadbar"><span id="loadspan"></span></div></div>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<div class="fixed inset-0 -z-10 overflow-hidden">
+  <div class="blob bg-primary w-[420px] h-[420px] top-[-100px] left-[-100px]"></div>
+  <div class="blob bg-secondary w-[520px] h-[520px] top-[30%] right-[-160px]"></div>
+  <div class="blob bg-accent w-[380px] h-[380px] bottom-[-120px] left-[20%]"></div>
+</div>
+
+<header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between py-4">
+    <a href="#home" data-cursor="big" class="flex items-center gap-2.5">
+      <img src="/assets/logo.png" alt="YW Designs logo" class="w-9 h-9 object-contain rounded-md bg-white/95 p-1">
+      <span class="font-poppins font-extrabold text-xl tracking-tight">YW<span class="grad-text">Designs</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-8 font-manrope text-sm text-muted">
+      <a href="#about" class="nav-link hover:text-white transition-colors">About</a>
+      <a href="#services" class="nav-link hover:text-white transition-colors">Services</a>
+      <a href="#portfolio" class="nav-link hover:text-white transition-colors">Portfolio</a>
+      <a href="#skills" class="nav-link hover:text-white transition-colors">Skills</a>
+      <a href="#testimonials" class="nav-link hover:text-white transition-colors">Testimonials</a>
+      <a href="#contact" class="nav-link hover:text-white transition-colors">Contact</a>
+    </nav>
+    <a href="#contact" data-cursor="big" class="btn-magnetic hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold glass hover-lift">
+      Hire Me <i class="fa-solid fa-arrow-up-right text-xs"></i>
+    </a>
+    <button id="menuBtn" class="md:hidden text-2xl"><i class="fa-solid fa-bars"></i></button>
+  </div>
+  <div id="mobileMenu" class="md:hidden hidden glass-strong mx-4 rounded-2xl px-6 py-6 flex flex-col gap-4 font-manrope text-muted">
+    <a href="#about" class="mobile-link">About</a>
+    <a href="#services" class="mobile-link">Services</a>
+    <a href="#portfolio" class="mobile-link">Portfolio</a>
+    <a href="#skills" class="mobile-link">Skills</a>
+    <a href="#testimonials" class="mobile-link">Testimonials</a>
+    <a href="#contact" class="mobile-link">Contact</a>
+  </div>
+</header>
+
+<section id="home" class="relative min-h-[100svh] flex items-center anim-gradient pt-32 pb-20">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center w-full">
+    <div>
+      <div class="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs font-manrope text-muted mb-6">
+        <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span> Available for new projects
+      </div>
+      <h1 class="reveal font-poppins font-extrabold leading-[1.05] text-4xl sm:text-5xl lg:text-6xl mb-6">Hi, I'm <span class="grad-text">Yasiru Pabasara</span></h1>
+      <p class="reveal text-lg sm:text-xl font-manrope font-medium text-muted mb-2" id="typedTitles">Creative Prompt Engineer</p>
+      <p class="reveal text-base text-muted/80 max-w-lg mb-8 leading-relaxed">Founder of <span class="text-white font-semibold">YW Designs</span> — crafting ideas into stunning visuals through modern graphic design, UI/UX, branding and AI‑powered creative solutions.</p>
+      <div class="reveal flex flex-wrap gap-3">
+        <a id="heroCallBtn" href="tel:" data-cursor="big" class="btn-magnetic ripple px-6 py-3 rounded-full font-semibold text-sm" style="background:var(--grad-1)"><i class="fa-solid fa-phone mr-2"></i>Call</a>
+        <a id="heroWhatsappBtn" href="#" target="_blank" data-cursor="big" class="btn-magnetic ripple px-6 py-3 rounded-full font-semibold text-sm glass hover-lift"><i class="fa-brands fa-whatsapp mr-2"></i>WhatsApp</a>
+        <a id="heroEmailBtn" href="mailto:" data-cursor="big" class="btn-magnetic ripple px-6 py-3 rounded-full font-semibold text-sm glass hover-lift"><i class="fa-solid fa-envelope mr-2"></i>Email</a>
+        <a href="#portfolio" data-cursor="big" class="btn-magnetic ripple px-6 py-3 rounded-full font-semibold text-sm glass hover-lift"><i class="fa-solid fa-images mr-2"></i>View Portfolio</a>
+      </div>
+    </div>
+    <div class="reveal relative flex justify-center lg:justify-end">
+      <div class="relative w-72 h-72 sm:w-80 sm:h-80">
+        <div class="absolute inset-0 rounded-full" style="background:var(--grad-1); filter:blur(40px); opacity:.5;"></div>
+        <div class="tilt relative w-full h-full rounded-full glass-strong grad-border flex items-center justify-center overflow-hidden">
+          <img src="/assets/profile.jpg" alt="Yasiru Pabasara" class="w-[92%] h-[92%] rounded-full object-cover object-top">
+        </div>
+        <div class="absolute -bottom-4 -left-4 glass-strong rounded-2xl px-3 py-2.5 shadow-lg flex items-center gap-2">
+          <img src="/assets/logo.png" alt="YW Designs logo" class="w-10 h-10 object-contain rounded bg-white/95 p-1">
+          <span class="text-xs font-manrope text-muted">YW<br>Designs</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted animate-bounce"><i class="fa-solid fa-chevron-down"></i></a>
+</section>
+
+<section id="about" class="relative py-28 px-6 lg:px-10">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-start">
+    <div class="reveal">
+      <span class="text-xs font-manrope tracking-[0.25em] text-accent uppercase">About</span>
+      <h2 class="font-poppins font-bold text-3xl sm:text-4xl mt-3 mb-6">Design with purpose, precision &amp; personality</h2>
+      <p class="text-muted leading-relaxed mb-4">Yasiru Pabasara is the founder of YW Designs, a creative studio helping businesses, startups and individuals build memorable brands through modern graphic design, UI/UX and AI‑powered creative solutions.</p>
+      <p class="text-muted leading-relaxed">Every project is approached with creativity, precision and obsessive attention to detail — delivering premium‑quality work that helps clients stand out in a crowded market.</p>
+    </div>
+    <div class="reveal grid sm:grid-cols-1 gap-5">
+      <div class="glass rounded-2xl p-6 hover-lift"><i class="fa-solid fa-bullseye text-accent mb-3 text-xl"></i><h3 class="font-poppins font-semibold mb-2">Mission</h3><p class="text-sm text-muted leading-relaxed">To turn every client's idea into a visual identity that feels premium, intentional and unmistakably theirs.</p></div>
+      <div class="glass rounded-2xl p-6 hover-lift"><i class="fa-solid fa-eye text-secondary mb-3 text-xl"></i><h3 class="font-poppins font-semibold mb-2">Vision</h3><p class="text-sm text-muted leading-relaxed">To become a go‑to creative partner for brands that refuse to look ordinary — blending human creativity with AI‑powered craft.</p></div>
+      <div class="glass rounded-2xl p-6 hover-lift"><i class="fa-solid fa-wand-magic-sparkles text-primary mb-3 text-xl"></i><h3 class="font-poppins font-semibold mb-2">Creative Philosophy</h3><p class="text-sm text-muted leading-relaxed">Great design is equal parts strategy and soul — precise enough to perform, expressive enough to be remembered.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="relative py-28 px-6 lg:px-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal"><span class="text-xs font-manrope tracking-[0.25em] text-accent uppercase">Services</span><h2 class="font-poppins font-bold text-3xl sm:text-4xl mt-3">What I can create for you</h2></div>
+    <div id="servicesGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+  </div>
+</section>
+
+<section class="relative py-28 px-6 lg:px-10 anim-gradient">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal"><span class="text-xs font-manrope tracking-[0.25em] text-accent uppercase">Why YW Designs</span><h2 class="font-poppins font-bold text-3xl sm:text-4xl mt-3">Built around your experience</h2></div>
+    <div id="whyGrid" class="grid sm:grid-cols-2 lg:grid-cols-5 gap-5"></div>
+  </div>
+</section>
+
+<section id="portfolio" class="relative py-28 px-6 lg:px-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-10 reveal"><span class="text-xs font-manrope tracking-[0.25em] text-accent uppercase">Portfolio</span><h2 class="font-poppins font-bold text-3xl sm:text-4xl mt-3">Selected work</h2></div>
+    <div id="filterBar" class="flex flex-wrap justify-center gap-3 mb-12 reveal"></div>
+    <div id="portfolioGrid" class="masonry"></div>
+  </div>
+</section>
+
+<section id="skills" class="relative py-28 px-6 lg:px-10 overflow-hidden">
+  <div class="max-w-7xl mx-auto mb-14 text-center reveal"><span class="text-xs font-manrope tracking-[0.25em] text-accent uppercase">Skills</span><h2 class="font-poppins font-bold text-3xl sm:text-4xl mt-3">Tools &amp; expertise</h2></div>
+  <div class="relative"><div class="marquee-track" id="marqueeTrack"></div></div>
+</section>
+
+<section id="testimonials" class="relative py-28 px-6 lg:px-10">
+  <div class="max-w-4xl mx-auto text-center mb-14 reveal"><span class="text-xs font-manrope tracking-[0.25em] text-accent uppercase">Testimonials</span><h2 class="font-poppins font-bold text-3xl sm:text-4xl mt-3">What clients say</h2></div>
+  <div class="max-w-3xl mx-auto relative reveal">
+    <div id="testiTrack" class="glass-strong rounded-3xl p-10 sm:p-14 text-center min-h-[260px] flex flex-col justify-center"></div>
+    <div class="flex justify-center gap-3 mt-6" id="testiDots"></div>
+  </div>
+</section>
+
+<section id="contact" class="relative py-28 px-6 lg:px-10 anim-gradient">
+  <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14">
+    <div class="reveal">
+      <span class="text-xs font-manrope tracking-[0.25em] text-accent uppercase">Contact</span>
+      <h2 class="font-poppins font-bold text-3xl sm:text-4xl mt-3 mb-8">Let's build something premium</h2>
+      <div class="space-y-4" id="contactInfoList"></div>
+      <div class="mt-10">
+        <p class="text-xs text-muted mb-4 font-manrope tracking-widest uppercase">Follow YW Designs</p>
+        <div class="flex flex-wrap gap-3" id="socialRow"></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <form id="contactForm" class="glass-strong rounded-3xl p-8 sm:p-10 space-y-5">
+        <div><label class="text-xs text-muted font-manrope mb-1 block">Name</label><input name="name" type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent transition-colors" placeholder="Your name"></div>
+        <div><label class="text-xs text-muted font-manrope mb-1 block">Email</label><input name="email" type="email" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent transition-colors" placeholder="you@email.com"></div>
+        <div><label class="text-xs text-muted font-manrope mb-1 block">Project details</label><textarea name="message" rows="4" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent transition-colors" placeholder="Tell me about your project..."></textarea></div>
+        <button type="submit" class="btn-magnetic ripple w-full py-3.5 rounded-xl font-semibold text-sm" style="background:var(--grad-1)">Send Message</button>
+        <p id="formNote" class="text-xs text-center hidden"></p>
+      </form>
+      <div class="glass rounded-2xl p-6 mt-6 flex items-center gap-5">
+        <div class="w-24 h-24 rounded-xl bg-white/90 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-qrcode text-3xl text-black/70"></i></div>
+        <div><p class="font-poppins font-semibold mb-1">Scan for digital card</p><p class="text-xs text-muted leading-relaxed">QR placeholder — set your live URL in the admin panel to activate this.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="relative py-12 px-6 lg:px-10 border-t border-white/10">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+    <div class="font-poppins font-extrabold text-lg">YW<span class="grad-text">Designs</span></div>
+    <p class="text-xs text-muted font-manrope">© <span id="year"></span> YW Designs. All rights reserved.</p>
+    <div class="flex gap-3" id="footerSocial"></div>
+  </div>
+</footer>
+
+<button id="backtotop" class="backtotop fixed bottom-8 right-8 w-12 h-12 rounded-full glass-strong flex items-center justify-center z-40" data-cursor="big"><i class="fa-solid fa-arrow-up"></i></button>
+
+<div class="lightbox" id="lightbox">
+  <button id="closeLightbox" class="absolute top-6 right-6 text-2xl"><i class="fa-solid fa-xmark"></i></button>
+  <div class="max-w-2xl w-full glass-strong rounded-3xl p-10 text-center overflow-hidden">
+    <div id="lbImageWrap" class="mb-4"></div>
+    <h3 id="lbTitle" class="font-poppins font-bold text-2xl mb-2"></h3>
+    <p id="lbDesc" class="text-muted text-sm"></p>
+  </div>
+</div>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const SOCIAL_ICONS = { facebook:'fa-facebook-f', instagram:'fa-instagram', linkedin:'fa-linkedin-in', behance:'fa-behance', dribbble:'fa-dribbble', github:'fa-github', tiktok:'fa-tiktok', youtube:'fa-youtube' };
+
+const services = [
+  {icon:'fa-palette', t:'Graphic Design', d:'Versatile visuals tailored to your brand across every channel.'},
+  {icon:'fa-shapes', t:'Logo Design', d:'Distinct marks that make your business instantly recognizable.'},
+  {icon:'fa-fingerprint', t:'Brand Identity', d:'Complete visual systems that keep every touchpoint consistent.'},
+  {icon:'fa-hashtag', t:'Social Media Designs', d:'Scroll-stopping posts, stories and campaigns that convert.'},
+  {icon:'fa-object-group', t:'UI/UX Design', d:'Intuitive, elegant interfaces for apps and websites.'},
+  {icon:'fa-robot', t:'AI Image Generation', d:'Custom AI-crafted visuals for concepts and campaigns.'},
+  {icon:'fa-brain', t:'AI Prompt Engineering', d:'Precision prompting to unlock premium AI creative output.'},
+  {icon:'fa-file-lines', t:'Flyer Design', d:'Sharp, informative flyers that get noticed and acted on.'},
+  {icon:'fa-image', t:'Poster Design', d:'Bold, high-impact posters for events and promotions.'},
+  {icon:'fa-panorama', t:'Banner Design', d:'Web and print banners built to grab attention fast.'},
+  {icon:'fa-building', t:'Business Branding', d:'Full branding suites that position you as premium.'},
+  {icon:'fa-car', t:'Vehicle Advertisement Designs', d:'Eye-catching wraps and decals that turn heads.'},
+  {icon:'fa-id-card', t:'Business Card Design', d:'Physical and digital cards that leave a lasting impression.'},
+  {icon:'fa-photo-film', t:'Thumbnail Design', d:'High-CTR thumbnails built for clicks and retention.'},
+  {icon:'fa-film', t:'Motion Graphics', d:'Animated visuals that bring static brands to life.'},
+  {icon:'fa-clapperboard', t:'Video Editing', d:'Polished edits for social, ads and brand storytelling.'},
+];
+const whyUs = [
+  {icon:'fa-bolt', t:'Real-Time Live Editing', d:'See changes as they happen — no back-and-forth delays.'},
+  {icon:'fa-infinity', t:'Unlimited Revisions', d:'We refine until it feels exactly right.'},
+  {icon:'fa-clock', t:'Same-Day Delivery', d:'Fast turnarounds without compromising quality.'},
+  {icon:'fa-gem', t:'Premium Quality', d:'Every pixel crafted with care and intention.'},
+  {icon:'fa-face-smile', t:'100% Client Satisfaction', d:'Your vision, delivered — every single time.'},
+];
+const skillsList = ['Photoshop','Illustrator','Premiere Pro','After Effects','Canva','Figma','Graphic Design','Logo Design','Brand Identity','Social Media Design','UI/UX Design','Wireframing','Prototyping','AI Prompt Engineering','AI Image Generation','Creative Direction','Business Branding','Motion Graphics','Video Editing'];
+
+document.getElementById('servicesGrid').innerHTML = services.map(s => `
+  <div class="reveal glass rounded-2xl p-6 hover-lift group">
+    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110" style="background:var(--grad-1)"><i class="fa-solid ${s.icon}"></i></div>
+    <h3 class="font-poppins font-semibold mb-2 text-sm">${s.t}</h3>
+    <p class="text-xs text-muted leading-relaxed">${s.d}</p>
+  </div>`).join('');
+
+document.getElementById('whyGrid').innerHTML = whyUs.map(w => `
+  <div class="reveal glass-strong rounded-2xl p-6 text-center hover-lift">
+    <div class="w-12 h-12 mx-auto rounded-full flex items-center justify-center mb-4" style="background:var(--grad-1)"><i class="fa-solid ${w.icon}"></i></div>
+    <h3 class="font-poppins font-semibold mb-2 text-sm">${w.t}</h3>
+    <p class="text-xs text-muted leading-relaxed">${w.d}</p>
+  </div>`).join('');
+
+const skillHTML = skillsList.map(s => `<span class="badge glass rounded-full px-5 py-2.5 text-xs font-manrope text-muted whitespace-nowrap transition-transform">${s}</span>`).join('');
+document.getElementById('marqueeTrack').innerHTML = skillHTML + skillHTML;
+
+/* ---------- Dynamic data from backend ---------- */
+let portfolioItems = [];
+let testimonials = [];
+let config = {};
+
+async function loadData(){
+  try{
+    const [cfgRes, pRes, tRes] = await Promise.all([
+      fetch('/api/config'), fetch('/api/portfolio'), fetch('/api/testimonials')
+    ]);
+    config = await cfgRes.json();
+    portfolioItems = await pRes.json();
+    testimonials = await tRes.json();
+  }catch(e){ console.error('Failed to load site data', e); }
+  renderConfig();
+  renderPortfolioFilters();
+  renderPortfolio(portfolioItems);
+  renderTesti();
+}
+
+function renderConfig(){
+  const phoneDigits = (config.phone || '').replace(/[^\d+]/g,'');
+  const waDigits = (config.whatsapp || '').replace(/[^\d]/g,'');
+  document.getElementById('heroCallBtn').href = phoneDigits ? 'tel:' + phoneDigits : '#';
+  document.getElementById('heroWhatsappBtn').href = waDigits ? 'https://wa.me/' + waDigits : '#';
+  document.getElementById('heroEmailBtn').href = config.email ? 'mailto:' + config.email : '#';
+
+  const rows = [
+    {icon:'fa-phone', label:'Phone', val: config.phone},
+    {icon:'fa-whatsapp', brand:true, label:'WhatsApp', val: config.whatsapp},
+    {icon:'fa-envelope', label:'Email', val: config.email},
+    {icon:'fa-globe', label:'Website', val: config.website},
+    {icon:'fa-location-dot', label:'Location', val: config.location},
+  ].filter(r => r.val);
+  document.getElementById('contactInfoList').innerHTML = rows.map(r => `
+    <div class="glass rounded-2xl p-5 flex items-center gap-4 hover-lift">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:var(--grad-1)"><i class="fa-${r.brand?'brands':'solid'} ${r.icon}"></i></div>
+      <div><p class="text-xs text-muted">${r.label}</p><p class="font-medium">${r.val}</p></div>
+    </div>`).join('');
+
+  const socials = Object.entries(config.socials || {}).filter(([k,v]) => v);
+  const socialHtml = socials.map(([k,v]) => `
+    <a href="${v}" target="_blank" class="w-11 h-11 rounded-xl glass flex items-center justify-center hover-lift" data-cursor="big"><i class="fa-brands ${SOCIAL_ICONS[k]||'fa-link'}"></i></a>`).join('');
+  document.getElementById('socialRow').innerHTML = socialHtml || '<p class="text-xs text-muted">Add your social links in the admin panel.</p>';
+  document.getElementById('footerSocial').innerHTML = socials.map(([k,v]) => `
+    <a href="${v}" target="_blank" class="w-9 h-9 rounded-lg glass flex items-center justify-center hover:text-accent transition-colors" data-cursor="big"><i class="fa-brands ${SOCIAL_ICONS[k]||'fa-link'} text-xs"></i></a>`).join('');
+}
+
+const filters = [{k:'all',l:'All'},{k:'branding',l:'Branding'},{k:'ui',l:'UI/UX'},{k:'social',l:'Social'},{k:'logo',l:'Logo'}];
+function renderPortfolioFilters(){
+  document.getElementById('filterBar').innerHTML = filters.map((f,i) => `
+    <button data-filter="${f.k}" class="filter-btn ${i===0?'active':''} px-5 py-2 rounded-full text-xs font-manrope glass border border-white/10 transition-all">${f.l}</button>`).join('');
+}
+
+function renderPortfolio(items){
+  document.getElementById('portfolioGrid').innerHTML = items.map(p => `
+    <div class="portfolio-item reveal mb-6 glass rounded-2xl overflow-hidden hover-lift cursor-pointer" data-title="${p.title}" data-desc="${(p.description||'').replace(/"/g,'&quot;')}" data-img="${p.image||''}">
+      <div class="w-full flex items-center justify-center bg-white/5 border-b border-white/10 overflow-hidden" style="min-height:220px">
+        ${p.image ? `<img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-image text-3xl text-muted/50 py-16"></i>`}
+      </div>
+      <div class="p-5">
+        <span class="text-[10px] uppercase tracking-widest text-accent font-manrope">${p.category}</span>
+        <h3 class="font-poppins font-semibold text-sm mt-1">${p.title}</h3>
+        <p class="text-xs text-muted mt-1 leading-relaxed">${p.description||''}</p>
+      </div>
+    </div>`).join('');
+  attachPortfolioEvents();
+  refreshScrollReveal();
+}
+
+document.getElementById('filterBar').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if(!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const f = btn.dataset.filter;
+  renderPortfolio(f==='all' ? portfolioItems : portfolioItems.filter(p=>p.category===f));
+});
+
+function attachPortfolioEvents(){
+  document.querySelectorAll('.portfolio-item').forEach(el => {
+    el.addEventListener('click', () => {
+      document.getElementById('lbTitle').textContent = el.dataset.title;
+      document.getElementById('lbDesc').textContent = el.dataset.desc;
+      const wrap = document.getElementById('lbImageWrap');
+      wrap.innerHTML = el.dataset.img ? `<img src="${el.dataset.img}" class="max-h-[50vh] mx-auto rounded-xl">` : `<i class="fa-solid fa-image text-5xl text-muted mb-4"></i>`;
+      document.getElementById('lightbox').classList.add('active');
+    });
+  });
+}
+document.getElementById('closeLightbox').addEventListener('click', ()=> document.getElementById('lightbox').classList.remove('active'));
+document.getElementById('lightbox').addEventListener('click', e => { if(e.target.id==='lightbox') e.currentTarget.classList.remove('active'); });
+
+let tIndex = 0;
+function renderTesti(){
+  if(!testimonials.length){
+    document.getElementById('testiTrack').innerHTML = '<p class="text-muted text-sm">No testimonials yet.</p>';
+    document.getElementById('testiDots').innerHTML = '';
+    return;
+  }
+  const t = testimonials[tIndex % testimonials.length];
+  document.getElementById('testiTrack').innerHTML = `
+    <i class="fa-solid fa-quote-left text-2xl text-accent mb-6 mx-auto"></i>
+    <p class="text-lg sm:text-xl font-manrope leading-relaxed mb-6">${t.quote}</p>
+    <p class="font-poppins font-semibold">${t.name}</p>
+    <p class="text-xs text-muted">${t.role}</p>`;
+  document.getElementById('testiDots').innerHTML = testimonials.map((_,i)=>`<button data-i="${i}" class="tdot w-2.5 h-2.5 rounded-full ${i===tIndex%testimonials.length?'bg-white':'bg-white/20'} transition-colors"></button>`).join('');
+}
+document.getElementById('testiDots').addEventListener('click', e=>{ const b=e.target.closest('.tdot'); if(!b) return; tIndex=+b.dataset.i; renderTesti(); });
+setInterval(()=>{ if(testimonials.length){ tIndex=(tIndex+1)%testimonials.length; renderTesti(); } }, 6000);
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ---------- Loader ---------- */
+window.addEventListener('load', () => {
+  gsap.to('#loadspan', {width:'100%', duration:1.1, ease:'power2.inOut'});
+  gsap.to('#loader', {opacity:0, duration:.6, delay:1.2, onComplete(){ document.getElementById('loader').style.visibility='hidden'; playHeroIntro(); }});
+});
+function playHeroIntro(){ gsap.timeline().to('#home .reveal', {opacity:1, y:0, stagger:.15, duration:.9, ease:'power3.out'}); }
+
+function refreshScrollReveal(){
+  ScrollTrigger.getAll().forEach(st => st.kill());
+  gsap.utils.toArray('.reveal').forEach(el => {
+    if(el.closest('#home')) return;
+    gsap.set(el, {opacity: el.closest('#portfolio') ? 0 : gsap.getProperty(el,'opacity')});
+    gsap.to(el, { opacity:1, y:0, duration:.9, ease:'power3.out', scrollTrigger:{ trigger: el, start:'top 88%' } });
+  });
+}
+gsap.utils.toArray('.reveal').forEach(el => {
+  if(el.closest('#home') || el.closest('#portfolio')) return;
+  gsap.to(el, { opacity:1, y:0, duration:.9, ease:'power3.out', scrollTrigger:{ trigger: el, start:'top 88%' } });
+});
+
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('glass-strong', window.scrollY > 40);
+  document.getElementById('backtotop').classList.toggle('show', window.scrollY > 500);
+});
+
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+document.querySelectorAll('.mobile-link').forEach(a => a.addEventListener('click', ()=> mobileMenu.classList.add('hidden')));
+document.getElementById('backtotop').addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0, rx=0, ry=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; dot.style.left=mx+'px'; dot.style.top=my+'px'; });
+function animateRing(){ rx += (mx-rx)*0.15; ry += (my-ry)*0.15; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animateRing); }
+animateRing();
+document.querySelectorAll('[data-cursor="big"], a, button').forEach(el => {
+  el.addEventListener('mouseenter', ()=> ring.classList.add('big'));
+  el.addEventListener('mouseleave', ()=> ring.classList.remove('big'));
+});
+
+document.querySelectorAll('.btn-magnetic').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width/2;
+    const y = e.clientY - r.top - r.height/2;
+    gsap.to(btn, {x:x*0.25, y:y*0.35, duration:.3, ease:'power2.out'});
+  });
+  btn.addEventListener('mouseleave', () => gsap.to(btn, {x:0, y:0, duration:.4, ease:'elastic.out(1,0.4)'}));
+});
+
+document.querySelectorAll('.ripple').forEach(btn => {
+  btn.addEventListener('click', function(e){
+    const r = document.createElement('span');
+    const rect = this.getBoundingClientRect();
+    r.className = 'ripple-el';
+    r.style.left = (e.clientX-rect.left-10)+'px';
+    r.style.top = (e.clientY-rect.top-10)+'px';
+    r.style.width = r.style.height = '20px';
+    this.appendChild(r);
+    setTimeout(()=> r.remove(), 700);
+  });
+});
+
+const tiltEl = document.querySelector('.tilt');
+if(tiltEl){
+  tiltEl.addEventListener('mousemove', e => {
+    const r = tiltEl.getBoundingClientRect();
+    const x = (e.clientX - r.left)/r.width - .5;
+    const y = (e.clientY - r.top)/r.height - .5;
+    gsap.to(tiltEl, {rotateY: x*14, rotateX: -y*14, duration:.4, ease:'power2.out'});
+  });
+  tiltEl.addEventListener('mouseleave', () => gsap.to(tiltEl, {rotateX:0, rotateY:0, duration:.6, ease:'power2.out'}));
+}
+
+const titles = ['Creative Prompt Engineer','Graphic Designer','UX/UI Designer'];
+let titleIdx = 0;
+const titleEl = document.getElementById('typedTitles');
+setInterval(() => {
+  titleIdx = (titleIdx+1)%titles.length;
+  gsap.to(titleEl, {opacity:0, y:-8, duration:.35, onComplete(){
+    titleEl.textContent = titles[titleIdx];
+    gsap.to(titleEl, {opacity:1, y:0, duration:.35});
+  }});
+}, 2600);
+
+document.getElementById('contactForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const note = document.getElementById('formNote');
+  const formData = new FormData(this);
+  const payload = Object.fromEntries(formData.entries());
+  try{
+    const res = await fetch('/api/contact', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok) throw new Error('Request failed');
+    note.textContent = "Thanks! Your message has been sent — I'll get back to you soon.";
+    note.classList.remove('hidden','text-red-400');
+    note.classList.add('text-accent');
+    this.reset();
+  }catch(err){
+    note.textContent = 'Something went wrong sending your message. Please try again or email directly.';
+    note.classList.remove('hidden','text-accent');
+    note.classList.add('text-red-400');
+  }
+});
+
+loadData();
+</script>
+</body>
+</html>

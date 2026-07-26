@@ -1,0 +1,37 @@
+{
+  "config": {
+    "phone": "+94 77 475 5486",
+    "whatsapp": "+94 77 475 5486",
+    "email": "pabasarabandara249@gmail.com",
+    "website": "",
+    "location": "Sri Lanka",
+    "socials": {
+      "facebook": "",
+      "instagram": "",
+      "linkedin": "",
+      "behance": "",
+      "dribbble": "",
+      "github": "",
+      "tiktok": "",
+      "youtube": ""
+    },
+    "qrDestination": ""
+  },
+  "portfolio": [
+    { "id": "p1", "category": "branding", "title": "Café Brand Identity", "description": "Full visual identity for a boutique café.", "image": "/uploads/cafe-brand-identity.png" },
+    { "id": "p2", "category": "ui", "title": "Fintech App UI", "description": "Clean mobile banking interface concept.", "image": "" },
+    { "id": "p3", "category": "social", "title": "Product Launch Campaign", "description": "Social media kit for an e-commerce launch.", "image": "" },
+    { "id": "p4", "category": "logo", "title": "Tuition Class Logo", "description": "Approachable mark for an education brand.", "image": "" },
+    { "id": "p5", "category": "branding", "title": "Restaurant Menu System", "description": "Print branding for a fine-dining restaurant.", "image": "" },
+    { "id": "p6", "category": "ui", "title": "Real Estate Dashboard", "description": "UX for a property management platform.", "image": "" },
+    { "id": "p7", "category": "social", "title": "Vehicle Wrap Design", "description": "Advertisement wrap for a delivery fleet.", "image": "" },
+    { "id": "p8", "category": "logo", "title": "Startup Wordmark", "description": "Minimal wordmark for a SaaS startup.", "image": "" },
+    { "id": "p9", "category": "ui", "title": "E-commerce Storefront", "description": "Modern storefront UI for an online store.", "image": "" }
+  ],
+  "testimonials": [
+    { "id": "t1", "quote": "YW Designs turned a vague idea into a brand identity that finally feels like us.", "name": "Client Name", "role": "Small Business Owner" },
+    { "id": "t2", "quote": "Same-day delivery and unlimited revisions — the process felt effortless and premium.", "name": "Client Name", "role": "Startup Founder" },
+    { "id": "t3", "quote": "The UI/UX work elevated our product. Every screen feels intentional and polished.", "name": "Client Name", "role": "Product Manager" }
+  ],
+  "messages": []
+}

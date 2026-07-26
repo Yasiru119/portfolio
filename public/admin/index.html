@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YW Designs — Admin</title>
+<link rel="icon" type="image/png" href="/assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: { colors:{ bg:'#09090B', primary:'#2563EB', secondary:'#7C3AED', accent:'#06B6D4', muted:'#B8C2CC' }, fontFamily:{ poppins:['Poppins','sans-serif'], inter:['Inter','sans-serif'] } } } }
+</script>
+<style>
+  html,body{ background:#09090B; color:#fff; font-family:'Inter',sans-serif; }
+  .glass{ background:rgba(255,255,255,0.06); backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.1); }
+  ::-webkit-scrollbar{ width:8px; } ::-webkit-scrollbar-thumb{ background:#2563EB; border-radius:10px; }
+  .tab-btn.active{ background:linear-gradient(135deg,#2563EB,#7C3AED); color:#fff; }
+  input,textarea,select{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); color:#fff; }
+  input:focus,textarea:focus,select:focus{ outline:none; border-color:#06B6D4; }
+  .thumb{ width:56px; height:56px; object-fit:cover; border-radius:8px; background:rgba(255,255,255,.05); }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- LOGIN -->
+<div id="loginScreen" class="min-h-screen flex items-center justify-center px-4">
+  <form id="loginForm" class="glass rounded-2xl p-8 w-full max-w-sm">
+    <div class="flex items-center gap-2 mb-6">
+      <img src="/assets/logo.png" class="w-8 h-8 rounded bg-white/90 p-1">
+      <span class="font-poppins font-bold">YW Designs Admin</span>
+    </div>
+    <label class="text-xs text-muted block mb-1">Username</label>
+    <input name="username" required class="w-full rounded-lg px-3 py-2.5 text-sm mb-4">
+    <label class="text-xs text-muted block mb-1">Password</label>
+    <input name="password" type="password" required class="w-full rounded-lg px-3 py-2.5 text-sm mb-2">
+    <p id="loginError" class="text-red-400 text-xs mb-3 hidden"></p>
+    <button class="w-full py-2.5 rounded-lg font-semibold text-sm" style="background:linear-gradient(135deg,#2563EB,#7C3AED)">Log In</button>
+  </form>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+  <header class="glass sticky top-0 z-20 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <img src="/assets/logo.png" class="w-7 h-7 rounded bg-white/90 p-1">
+      <span class="font-poppins font-bold text-sm sm:text-base">YW Designs — Admin</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="/" target="_blank" class="text-xs text-muted hover:text-white"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>View site</a>
+      <button id="logoutBtn" class="text-xs px-3 py-1.5 rounded-lg glass hover:bg-white/10">Log out</button>
+    </div>
+  </header>
+
+  <div class="max-w-6xl mx-auto px-6 py-8">
+    <nav class="flex flex-wrap gap-2 mb-8">
+      <button data-tab="messages" class="tab-btn active px-4 py-2 rounded-full text-xs font-semibold glass">Messages <span id="unreadBadge" class="ml-1"></span></button>
+      <button data-tab="portfolio" class="tab-btn px-4 py-2 rounded-full text-xs font-semibold glass">Portfolio</button>
+      <button data-tab="testimonials" class="tab-btn px-4 py-2 rounded-full text-xs font-semibold glass">Testimonials</button>
+      <button data-tab="settings" class="tab-btn px-4 py-2 rounded-full text-xs font-semibold glass">Site Settings</button>
+      <button data-tab="account" class="tab-btn px-4 py-2 rounded-full text-xs font-semibold glass">Account</button>
+    </nav>
+
+    <!-- MESSAGES -->
+    <section id="tab-messages" class="tab-panel">
+      <h2 class="font-poppins font-bold text-xl mb-4">Contact Messages</h2>
+      <div id="messagesList" class="space-y-3"></div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section id="tab-portfolio" class="tab-panel hidden">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-poppins font-bold text-xl">Portfolio Items</h2>
+        <button id="addPortfolioBtn" class="px-4 py-2 rounded-lg text-xs font-semibold" style="background:linear-gradient(135deg,#2563EB,#7C3AED)"><i class="fa-solid fa-plus mr-1"></i>Add project</button>
+      </div>
+      <div id="portfolioForm" class="glass rounded-2xl p-6 mb-6 hidden">
+        <input type="hidden" id="pf-id">
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><label class="text-xs text-muted block mb-1">Title</label><input id="pf-title" class="w-full rounded-lg px-3 py-2 text-sm"></div>
+          <div><label class="text-xs text-muted block mb-1">Category</label>
+            <select id="pf-category" class="w-full rounded-lg px-3 py-2 text-sm">
+              <option value="branding">Branding</option><option value="ui">UI/UX</option><option value="social">Social</option><option value="logo">Logo</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-4"><label class="text-xs text-muted block mb-1">Description</label><textarea id="pf-desc" rows="2" class="w-full rounded-lg px-3 py-2 text-sm"></textarea></div>
+        <div class="mb-4"><label class="text-xs text-muted block mb-1">Image</label><input id="pf-image" type="file" accept="image/*" class="w-full text-xs"></div>
+        <div class="flex gap-2">
+          <button id="pf-save" class="px-4 py-2 rounded-lg text-xs font-semibold" style="background:linear-gradient(135deg,#2563EB,#7C3AED)">Save</button>
+          <button id="pf-cancel" class="px-4 py-2 rounded-lg text-xs font-semibold glass">Cancel</button>
+        </div>
+      </div>
+      <div id="portfolioList" class="space-y-3"></div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="tab-testimonials" class="tab-panel hidden">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-poppins font-bold text-xl">Testimonials</h2>
+        <button id="addTestiBtn" class="px-4 py-2 rounded-lg text-xs font-semibold" style="background:linear-gradient(135deg,#2563EB,#7C3AED)"><i class="fa-solid fa-plus mr-1"></i>Add testimonial</button>
+      </div>
+      <div id="testiForm" class="glass rounded-2xl p-6 mb-6 hidden">
+        <input type="hidden" id="tf-id">
+        <div class="mb-4"><label class="text-xs text-muted block mb-1">Quote</label><textarea id="tf-quote" rows="2" class="w-full rounded-lg px-3 py-2 text-sm"></textarea></div>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div><label class="text-xs text-muted block mb-1">Client Name</label><input id="tf-name" class="w-full rounded-lg px-3 py-2 text-sm"></div>
+          <div><label class="text-xs text-muted block mb-1">Role / Company</label><input id="tf-role" class="w-full rounded-lg px-3 py-2 text-sm"></div>
+        </div>
+        <div class="flex gap-2">
+          <button id="tf-save" class="px-4 py-2 rounded-lg text-xs font-semibold" style="background:linear-gradient(135deg,#2563EB,#7C3AED)">Save</button>
+          <button id="tf-cancel" class="px-4 py-2 rounded-lg text-xs font-semibold glass">Cancel</button>
+        </div>
+      </div>
+      <div id="testiList" class="space-y-3"></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="tab-panel hidden">
+      <h2 class="font-poppins font-bold text-xl mb-4">Site Settings</h2>
+      <div class="glass rounded-2xl p-6 space-y-4 max-w-2xl">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div><label class="text-xs text-muted block mb-1">Phone</label><input id="cfg-phone" class="w-full rounded-lg px-3 py-2 text-sm"></div>
+          <div><label class="text-xs text-muted block mb-1">WhatsApp</label><input id="cfg-whatsapp" class="w-full rounded-lg px-3 py-2 text-sm"></div>
+          <div><label class="text-xs text-muted block mb-1">Email</label><input id="cfg-email" class="w-full rounded-lg px-3 py-2 text-sm"></div>
+          <div><label class="text-xs text-muted block mb-1">Website</label><input id="cfg-website" class="w-full rounded-lg px-3 py-2 text-sm" placeholder="https://"></div>
+          <div><label class="text-xs text-muted block mb-1">Location</label><input id="cfg-location" class="w-full rounded-lg px-3 py-2 text-sm"></div>
+        </div>
+        <h3 class="font-semibold text-sm pt-2">Social Links</h3>
+        <div class="grid sm:grid-cols-2 gap-4" id="socialInputs"></div>
+        <button id="saveConfigBtn" class="px-5 py-2.5 rounded-lg text-sm font-semibold" style="background:linear-gradient(135deg,#2563EB,#7C3AED)">Save Settings</button>
+        <p id="configNote" class="text-xs text-accent hidden">Saved!</p>
+      </div>
+    </section>
+
+    <!-- ACCOUNT -->
+    <section id="tab-account" class="tab-panel hidden">
+      <h2 class="font-poppins font-bold text-xl mb-4">Account</h2>
+      <div class="glass rounded-2xl p-6 max-w-md space-y-4">
+        <div><label class="text-xs text-muted block mb-1">Current password</label><input id="acc-current" type="password" class="w-full rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-muted block mb-1">New password</label><input id="acc-new" type="password" class="w-full rounded-lg px-3 py-2 text-sm"></div>
+        <button id="changePassBtn" class="px-5 py-2.5 rounded-lg text-sm font-semibold" style="background:linear-gradient(135deg,#2563EB,#7C3AED)">Update Password</button>
+        <p id="accNote" class="text-xs hidden"></p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="/admin/admin.js"></script>
+</body>
+</html>
