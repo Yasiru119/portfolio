@@ -51,9 +51,11 @@
     { "id": "ui-17", "category": "ui", "title": "UI/UX Design #17", "description": "High-fidelity UI design showcasing creativity and technical precision.", "image": "https://raw.githubusercontent.com/Yasiru119/portfolio/main/public/uploads/ui/ui-17.png" }
   ],
   "testimonials": [
-    { "id": "t1", "quote": "YW Designs turned a vague idea into a brand identity that finally feels like us.", "name": "Client Name", "role": "Small Business Owner" },
-    { "id": "t2", "quote": "Same-day delivery and unlimited revisions — the process felt effortless and premium.", "name": "Client Name", "role": "Startup Founder" },
-    { "id": "t3", "quote": "The UI/UX work elevated our product. Every screen feels intentional and polished.", "name": "Client Name", "role": "Product Manager" }
+    { "id": "t1", "quote": "YW Designs delivered exactly what I was looking for. The design was modern, clean, and completed before the deadline. Excellent communication throughout the project.", "name": "Dinesh Jayasinghe", "role": "Client" },
+    { "id": "t2", "quote": "The vehicle advertisement looked premium and attracted a lot of attention online. I'm impressed with the creativity and professionalism shown from start to finish.", "name": "Lakshan Wijesinghe", "role": "Client" },
+    { "id": "t3", "quote": "I requested social media designs for my small business, and the results were amazing. Every detail matched my brand perfectly. Highly recommended!", "name": "Sachini Perera", "role": "Small Business Owner" },
+    { "id": "t4", "quote": "Working with YW Designs was a great experience. Fast response, unlimited revisions, and outstanding quality. I will definitely choose them again for future projects.", "name": "Nadeesha Fernando", "role": "Client" },
+    { "id": "t5", "quote": "The logo and branding package exceeded my expectations. The designer understood my vision and created something unique and professional. Fantastic service!", "name": "Umeshi Silva", "role": "Client" }
   ],
   "messages": []
 }
